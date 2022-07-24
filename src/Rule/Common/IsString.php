@@ -1,8 +1,8 @@
 <?php
-namespace src\Validator\Rule\Common;
+namespace src\Rule\Common;
 
-use src\Validator\Rule\Rule;
-use src\Validator\Validator;
+use src\Rule\Rule;
+use src\Imposer;
 
 class IsString extends Rule
 {
@@ -17,11 +17,11 @@ class IsString extends Rule
      * @param $value
      * @param string $id
      * @return bool
-     * @throws \src\Validator\Exception\UndefinedValidationException
+     * @throws \src\Exception\UndefinedValidationException
      */
     public function validate($value, string $id): bool
     {
-        if ($value === Validator::FIELD_NOT_EXIST) return true;
+        if ($value === Imposer::FIELD_NOT_EXIST) return true;
 
         $this->translateMessage(['id' => $id]);
 

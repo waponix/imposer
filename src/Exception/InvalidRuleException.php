@@ -1,5 +1,5 @@
 <?php
-namespace src\Validator\Exception;
+namespace src\Exception;
 
 use Throwable;
 

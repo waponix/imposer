@@ -1,7 +1,7 @@
 <?php
-namespace src\Validator\Utility;
+namespace src\Utility;
 
-use src\Validator\Utility\Exception\ParameterTypeMismatchException;
+use src\Utility\Exception\ParameterTypeMismatchException;
 
 class Parameter
 {

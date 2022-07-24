@@ -1,14 +1,14 @@
 <?php
-namespace src\Validator;
+namespace src;
 
-use src\Validator\Exception\InvalidRuleException;
-use src\Validator\Rule\AbstractRule;
+use src\Exception\InvalidRuleException;
+use src\Rule\AbstractRule;
 
 /**
- * Class Validator
- * @package src\Validator
+ * Class Imposer
+ * @package src
  */
-class Validator
+class Imposer
 {
     const FIELD_NOT_EXIST = 'FIELD_NOT_EXIST';
 
@@ -28,7 +28,7 @@ class Validator
     private array $errors = [];
 
     /**
-     * Validator constructor.
+     * Imposer constructor.
      * @param $schema
      * @param $input
      */
