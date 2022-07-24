@@ -1,9 +1,9 @@
 <?php
-namespace src\Validator\Utility;
+namespace src\Utility;
 
 class Arr
 {
-    public static function toWord(array $items, string $separator = ', ', ?string $last = 'and')
+    public static function toWord(array $items, string $separator = ', ', string $last = 'and')
     {
         $lastItem = null;
         if ($last !== null && count($items) > 1) {

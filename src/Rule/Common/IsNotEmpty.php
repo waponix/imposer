@@ -1,7 +1,7 @@
 <?php
-namespace src\Validator\Rule\Common;
+namespace src\Rule\Common;
 
-use src\Validator\Rule\Rule;
+use src\Rule\Rule;
 
 class IsNotEmpty extends Rule
 {

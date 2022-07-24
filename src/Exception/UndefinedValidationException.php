@@ -1,11 +1,11 @@
 <?php
-namespace src\Validator\Exception;
+namespace src\Exception;
 
 use Throwable;
 
 /**
  * Class UndefinedValidationException
- * @package src\Validator\Exception
+ * @package src\Exception
  */
 class UndefinedValidationException extends \Exception
 {

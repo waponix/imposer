@@ -1,5 +1,5 @@
 <?php
-namespace src\Validator\Rule;
+namespace src\Rule;
 
 interface RuleInterface
 {

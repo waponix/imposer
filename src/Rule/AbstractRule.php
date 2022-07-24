@@ -1,11 +1,11 @@
 <?php
-namespace src\Validator\Rule;
+namespace src\Rule;
 
-use src\Validator\Utility\Parameter;
+use src\Utility\Parameter;
 
 /**
  * Class AbstractRule
- * @package src\Validator\Rule
+ * @package src\Rule
  */
 abstract class AbstractRule implements RuleInterface
 {
@@ -53,7 +53,7 @@ abstract class AbstractRule implements RuleInterface
     /**
      * @param $id
      * @return mixed|null
-     * @throws \src\Validator\Utility\Exception\ParameterTypeMismatchException
+     * @throws \src\Utility\Exception\ParameterTypeMismatchException
      */
     public function get($id)
     {
@@ -66,7 +66,7 @@ abstract class AbstractRule implements RuleInterface
 
     /**
      * @return string
-     * @throws \src\Validator\Utility\Exception\ParameterTypeMismatchException
+     * @throws \src\Utility\Exception\ParameterTypeMismatchException
      */
     public function getMessage(): string
     {
@@ -75,7 +75,7 @@ abstract class AbstractRule implements RuleInterface
 
     /**
      * @return string|null
-     * @throws \src\Validator\Utility\Exception\ParameterTypeMismatchException
+     * @throws \src\Utility\Exception\ParameterTypeMismatchException
      */
     public function getTargetId(): ?string
     {
@@ -103,7 +103,7 @@ abstract class AbstractRule implements RuleInterface
     /**
      * @param array $translations
      * @return AbstractRule
-     * @throws \src\Validator\Utility\Exception\ParameterTypeMismatchException
+     * @throws \src\Utility\Exception\ParameterTypeMismatchException
      */
     protected function translateMessage(array $translations): AbstractRule
     {

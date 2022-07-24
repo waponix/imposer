@@ -1,8 +1,8 @@
 <?php
-namespace src\Validator\Rule\Common;
+namespace src\Rule\Common;
 
-use src\Validator\Rule\Rule;
-use src\Validator\Validator;
+use src\Rule\Rule;
+use src\Imposer;
 
 class IsNumeric extends Rule
 {
@@ -15,7 +15,7 @@ class IsNumeric extends Rule
 
     public function validate($value, string $id): bool
     {
-        if ($value === Validator::FIELD_NOT_EXIST) return true;
+        if ($value === Imposer::FIELD_NOT_EXIST) return true;
 
         $this->translateMessage(['id' => $id]);
 

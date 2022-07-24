@@ -1,11 +1,11 @@
 <?php
-namespace src\Validator\Rule;
+namespace src\Rule;
 
-use src\Validator\Exception\UndefinedValidationException;
+use src\Exception\UndefinedValidationException;
 
 /**
  * Class Rule
- * @package src\Validator\Rule
+ * @package src\Rule
  */
 class Rule extends AbstractRule
 {

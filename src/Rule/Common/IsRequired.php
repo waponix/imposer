@@ -1,9 +1,9 @@
 <?php
-namespace src\Validator\Rule\Common;
+namespace src\Rule\Common;
 
-use src\Validator\Rule\Rule;
-use src\Validator\Utility\Parameter;
-use src\Validator\Validator;
+use src\Rule\Rule;
+use src\Utility\Parameter;
+use src\Imposer;
 
 class IsRequired extends Rule
 {
@@ -16,7 +16,7 @@ class IsRequired extends Rule
      * @param $value
      * @param string $id
      * @return bool
-     * @throws \src\Validator\Utility\Exception\ParameterTypeMismatchException
+     * @throws \src\Utility\Exception\ParameterTypeMismatchException
      */
     public function validate($value, string $id): bool
     {
@@ -24,7 +24,7 @@ class IsRequired extends Rule
         // Prepare the error message
         $this->translateMessage(['id' => $id]);
 
-        if ($value === Validator::FIELD_NOT_EXIST) return false;
+        if ($value === Imposer::FIELD_NOT_EXIST) return false;
 
         return true;
     }

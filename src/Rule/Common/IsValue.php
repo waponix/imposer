@@ -1,10 +1,10 @@
 <?php
-namespace src\Validator\Rule\Common;
+namespace src\Rule\Common;
 
-use src\Validator\Rule\Rule;
-use src\Validator\Utility\Arr;
-use src\Validator\Utility\Parameter;
-use src\Validator\Validator;
+use src\Rule\Rule;
+use src\Utility\Arr;
+use src\Utility\Parameter;
+use src\Imposer;
 
 class IsValue extends Rule
 {
@@ -16,7 +16,7 @@ class IsValue extends Rule
 
     public function validate($value, string $id): bool
     {
-        if ($value === Validator::FIELD_NOT_EXIST) return true;
+        if ($value === Imposer::FIELD_NOT_EXIST) return true;
 
         $choices = $this->get(self::KEY_CHOICES);
 

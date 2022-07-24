@@ -1,17 +1,17 @@
 <?php
 require_once 'autoload.php';
 
-use src\Validator\Validator;
-use src\Validator\Rule\Common\IsRequired;
-use src\Validator\Rule\Common\IsString;
-use src\Validator\Rule\Common\IsNotEmpty;
-use src\Validator\Rule\Common\IsNumeric;
-use src\Validator\Rule\Common\MaxLength;
-use src\Validator\Rule\Common\WithinRange;
-use src\Validator\Rule\Common\IsValue;
+use src\Imposer;
+use src\Rule\Common\IsRequired;
+use src\Rule\Common\IsString;
+use src\Rule\Common\IsNotEmpty;
+use src\Rule\Common\IsNumeric;
+use src\Rule\Common\MaxLength;
+use src\Rule\Common\WithinRange;
+use src\Rule\Common\IsValue;
 
-$validator = new Validator();
-$validator
+$imposer = new Imposer();
+$imposer
     ->setSchema([
         'user' => [
             'name' => [
@@ -38,7 +38,7 @@ $validator
     ]);
 
 echo '<pre>';
-echo json_encode($validator
+echo json_encode($imposer
     ->validate()
     ->getErrors(), JSON_PRETTY_PRINT);
 echo '</pre>';

@@ -1,5 +1,5 @@
 <?php
-namespace src\Validator\Utility\Exception;
+namespace src\Utility\Exception;
 
 class ParameterTypeMismatchException extends \Exception
 {
