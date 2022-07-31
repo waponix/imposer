@@ -23,6 +23,11 @@ abstract class AbstractRule implements RuleInterface
     /**
      * @var array
      */
+    protected array $initState = [];
+
+    /**
+     * @var array
+     */
     protected array $parameters = [];
 
     /**
@@ -150,10 +155,7 @@ abstract class AbstractRule implements RuleInterface
     }
 
 
-    protected function configure()
-    {
-
-    }
+    abstract protected function configure();
 
     /**
      * @return $this
@@ -176,4 +178,6 @@ abstract class AbstractRule implements RuleInterface
      * @return bool
      */
     abstract public function validate($value, string $id): bool;
+
+    abstract public function recycle();
 }

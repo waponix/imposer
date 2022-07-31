@@ -13,27 +13,35 @@ use src\Rule\Common\IsValue;
 $imposer = new Imposer();
 $imposer
     ->setSchema([
-        'user' => [
-            'name' => [
-                IsString::impose(),
-                IsNotEmpty::impose(),
-                MaxLength::impose(['limit' => 10])
-            ],
-            'age' => [
-                IsNumeric::impose(),
-                IsNotEmpty::impose(),
-                WithinRange::impose(['min' => 21, 'max' => 60])
-            ],
-            'gender' => [
-                IsRequired::impose(),
-                IsValue::impose(['choices' => ['male', 'female', 'other']])
+        'users' => [
+            '[]' => [
+                'name' => [
+                    IsRequired::impose(),
+                    IsString::impose(),
+                    IsNotEmpty::impose(),
+                    MaxLength::impose(['limit' => 10])
+                ],
+                'age' => [
+                    IsRequired::impose(),
+                    IsNumeric::impose(),
+                    WithinRange::impose(['min' => 21, 'max' => 60])
+                ],
+                'gender' => [
+                    IsRequired::impose(),
+                    IsValue::impose(['choices' => ['male', 'female', 'other']])
+                ]
             ]
         ]
     ])
     ->setInput([
-        'user' => [
-            'name' => 'John Doe',
-            'age' => 21
+        'users' => [
+            [
+                'name' => 'eric bermejo reyes'
+            ],
+            [
+                'name' => 'hoshi faith agbay',
+                'age' => 18
+            ]
         ]
     ]);
 

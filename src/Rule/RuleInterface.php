@@ -8,6 +8,7 @@ interface RuleInterface
     public function get($id);
     public function getMessage(): string;
     public function validate($value, string $id): bool;
+    public function recycle();
     public function getTargetId(): ?string;
     public function getTargetActualValue();
     public function passTargetActualValue($value);
