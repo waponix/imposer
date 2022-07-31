@@ -12,6 +12,8 @@ class Imposer
 {
     const FIELD_NOT_EXIST = 'FIELD_NOT_EXIST';
 
+    const SPL_KEY_GROUP = '[]';
+
     /**
      * @var array
      */
@@ -80,43 +82,72 @@ class Imposer
      * @param array $schema
      * @param array $id
      * @throws InvalidRuleException
+     * @throws Utility\Exception\ParameterTypeMismatchException
      */
     private function validateLoop($schema = [], $id = [])
     {
-        foreach ($schema as $key => $item) {
+        foreach ($schema as $key => $scheme) {
             $newId = $id;
             $newId[] = $key;
 
-            if (is_array($item) && !$this->scanItemsForRules($item)) {
-                // keep going deeper into the schema
-                $this->validateLoop($item, $newId);
-                continue;
-            } else if (is_array($item) && $this->scanItemsForRules($item)) {
-                // when the array contains a rule, consider them as a rule group
-                $this->executeValidations($item, $newId);
+            if ($key === self::SPL_KEY_GROUP) {
+                // perform group validation
+                $this->validateGroup($scheme, $id);
                 continue;
             }
 
-            if (!$item instanceof AbstractRule) {
-                $itemType = is_object($item) ? get_class($item) : gettype($item);
-                throw new InvalidRuleException('Expecting rule to be an instance of ' . AbstractRule::class . ', ' . $itemType . ' given');
+            if (is_array($scheme) && !$this->scanSchemeForRules($scheme)) {
+                // keep going deeper into the schema
+                $this->validateLoop($scheme, $newId);
+                continue;
+            } else if (is_array($scheme) && $this->scanSchemeForRules($scheme)) {
+                // when the array contains a rule, consider them as a rule group
+                $this->executeValidations($scheme, $newId);
+                continue;
+            }
+
+            if (!$scheme instanceof AbstractRule) {
+                $schemeType = is_object($scheme) ? get_class($scheme) : gettype($scheme);
+                throw new InvalidRuleException('Expecting rule to be an instance of ' . AbstractRule::class . ', ' . $schemeType . ' given');
             }
 
             $newId = implode('.', $id);
-            $this->executeValidation($item, $newId);
+            $this->executeValidation($scheme, $newId);
         }
     }
 
     /**
-     * @param array $items
+     * @param array $schema
+     * @param array $id
+     * @return $this|void
+     * @throws InvalidRuleException
+     * @throws Utility\Exception\ParameterTypeMismatchException
+     */
+    private function validateGroup(array $schema, array $id)
+    {
+        $keys = $this->getInputKeys(implode('.', $id));
+
+        if (empty($keys)) return;
+
+        foreach($keys as $key) {
+            $newId = $id;
+            $newId[] = $key;
+            $this->validateLoop($schema, $newId);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $schema
      * @return bool
      */
-    private function scanItemsForRules(array $items)
+    private function scanSchemeForRules(array $schema)
     {
         $hasRule = false;
 
-        foreach ($items as $item) {
-            if ($item instanceof AbstractRule) $hasRule = true; break;
+        foreach ($schema as $scheme) {
+            if ($scheme instanceof AbstractRule) $hasRule = true; break;
         }
 
         return $hasRule;
@@ -124,7 +155,8 @@ class Imposer
 
     /**
      * @param AbstractRule $rule
-     * @param array $id
+     * @param string $id
+     * @throws Utility\Exception\ParameterTypeMismatchException
      */
     private function executeValidation(AbstractRule $rule, string $id)
     {
@@ -136,7 +168,7 @@ class Imposer
         }
 
         // perform validation;
-        if ($rule->validate($value, $id) === false) {
+        if ($rule->recycle()->validate($value, $id) === false) {
             $this->addError($id, $rule->getMessage());
         }
     }
@@ -146,6 +178,7 @@ class Imposer
      * @param array $id
      * @return $this
      * @throws InvalidRuleException
+     * @throws Utility\Exception\ParameterTypeMismatchException
      */
     private function executeValidations(array $rules, array $id)
     {
@@ -167,9 +200,9 @@ class Imposer
      * @param null $input
      * @return array|mixed|string
      */
-    public function getInput($id = null, $input = null)
+    private function getInput($id = null, $input = null)
     {
-        if ($id === null) {
+        if ($id === null || empty($id)) {
             // when there is no id provided, return the whole input
             return $this->input;
         }
@@ -194,6 +227,24 @@ class Imposer
         return $input[$key];
     }
 
+    /**
+     * @param null $id
+     * @param null $input
+     * @return array
+     */
+    private function getInputKeys($id = null, $input = null)
+    {
+        $input = $this->getInput($id);
+
+        if (!is_array($input)) return [];
+
+        return array_keys($input);
+    }
+
+    /**
+     * @param string $id
+     * @param $message
+     */
     private function addError(string $id, $message)
     {
         $ids = explode('.', $id);

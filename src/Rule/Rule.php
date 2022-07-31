@@ -22,6 +22,15 @@ class Rule extends AbstractRule
         foreach($parameters as $id => $value) {
             $this->set($id, $value);
         }
+
+        // get the initial state of the rule
+        $this->initState = $this->parameters;
+    }
+
+
+    protected function configure()
+    {
+        // TODO: Implement configure() method.
     }
 
     /**
@@ -43,5 +52,20 @@ class Rule extends AbstractRule
     {
         // This is to remind caller he needs to define this function
         throw new UndefinedValidationException('There is no defined validation found for class ' . get_class($this));
+    }
+
+    /**
+     * @return $this
+     */
+    public function recycle()
+    {
+        $initial = md5(serialize($this->initState));
+        $current = md5(serialize($this->parameters));
+
+        if ($initial !== $current) {
+            $this->parameters = $this->initState;
+        }
+
+        return $this;
     }
 }
