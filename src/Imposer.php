@@ -10,7 +10,7 @@ use src\Rule\AbstractRule;
  */
 class Imposer
 {
-    const FIELD_NOT_EXIST = 'FIELD_NOT_EXIST';
+    const FIELD_NOT_EXIST = '_6ef9b1dc6033e4418f186f77e8f62287_';
 
     const SPL_KEY_GROUP = '[]';
 
@@ -23,6 +23,11 @@ class Imposer
      * @var array
      */
     private array $input;
+
+    /**
+     * @var array
+     */
+    private array $inputLinks;
 
     /**
      * @var array
@@ -196,19 +201,27 @@ class Imposer
     }
 
     /**
-     * @param null $id
+     * @param string|null $ogId
+     * @param string|null $id
      * @param null $input
      * @return array|mixed|string
      */
-    private function getInput($id = null, $input = null)
+    private function getInput(?string $ogId = null, ?string $id = null, &$input = null)
     {
-        if ($id === null || empty($id)) {
+        if ($ogId === null || empty($ogId)) {
             // when there is no id provided, return the whole input
             return $this->input;
         }
 
+        $id = $id === null ? $ogId : $id;
+
+        if (isset($this->inputLinks[$ogId])) {
+            // cached input are returned instantly
+            return $this->inputLinks[$ogId];
+        }
+
         if ($input === null) {
-            $input = $this->input;
+            $input = &$this->input;
         }
 
         $id = explode('.', $id);
@@ -221,8 +234,10 @@ class Imposer
 
         if (count($id) > 0) {
             // keep going until the last key is reached
-            return $this->getInput(implode('.', $id), $input[$key]);
+            return $this->getInput($ogId, implode('.', $id), $input[$key]);
         }
+
+        $this->inputLinks[$ogId] = &$input[$key];
 
         return $input[$key];
     }
