@@ -206,40 +206,41 @@ class Imposer
      * @param null $input
      * @return array|mixed|string
      */
-    private function getInput(?string $ogId = null, ?string $id = null, &$input = null)
+    private function getInput(?string $id = null)
     {
-        if ($ogId === null || empty($ogId)) {
+        if ($id=== null || empty($id)) {
             // when there is no id provided, return the whole input
             return $this->input;
         }
 
-        $id = $id === null ? $ogId : $id;
-
-        if (isset($this->inputLinks[$ogId])) {
+        if (isset($this->inputLinks[$id])) {
             // cached input are returned instantly
-            return $this->inputLinks[$ogId];
+            return $this->inputLinks[$id];
         }
 
-        if ($input === null) {
-            $input = &$this->input;
-        }
-
+        $stringId = $id;
         $id = explode('.', $id);
         $key = array_shift($id);
 
-        if (!isset($input[$key])) {
+        if (!isset($this->input[$key])) {
             // return a field not exist value for non existing keys
             return self::FIELD_NOT_EXIST;
         }
 
-        if (count($id) > 0) {
-            // keep going until the last key is reached
-            return $this->getInput($ogId, implode('.', $id), $input[$key]);
+        $input = &$this->input[$key];
+
+        while (count($id) > 0) {
+            $key = array_shift($id);
+            if (!isset($input[$key])) {
+                return self::FIELD_NOT_EXIST;
+            }
+
+            $input = &$input[$key];
         }
 
-        $this->inputLinks[$ogId] = &$input[$key];
+        $this->inputLinks[$stringId] = &$input;
 
-        return $input[$key];
+        return $input;
     }
 
     /**
