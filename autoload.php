@@ -1,8 +1,5 @@
 <?php
-
-function apiAutoloader($class)
+spl_autoload_register(function ($class)
 {
     include_once str_replace('\\', '/', $class) . '.php';
-}
-
-spl_autoload_register('apiAutoloader');
+});
