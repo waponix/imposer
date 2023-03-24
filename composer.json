@@ -1,0 +1,19 @@
+{
+    "name": "waponix/imposer",
+    "description": "A tool that will help with data validations",
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Waponix\\Imposer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "eric",
+            "email": "eric@antlabs.com"
+        }
+    ],
+    "require": {}
+}
