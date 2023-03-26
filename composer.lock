@@ -4,8 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c447798aff7a5ddd052ec0e626d858b",
-    "packages": [],
+    "content-hash": "50d74b5345ae855ddd0452fcc1988734",
+    "packages": [
+        {
+            "name": "waponix/pocket",
+            "version": "v2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/waponix/pocket.git",
+                "reference": "ceddec0437d955d72eff1251ea9efb0ff71b73a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/waponix/pocket/zipball/ceddec0437d955d72eff1251ea9efb0ff71b73a3",
+                "reference": "ceddec0437d955d72eff1251ea9efb0ff71b73a3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Waponix\\Pocket\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "eric",
+                    "email": "eric.bermejo.reyes@gmail.com"
+                }
+            ],
+            "description": "Is a service container that considers all loadable classes inside a project as a service.",
+            "support": {
+                "issues": "https://github.com/waponix/pocket/issues",
+                "source": "https://github.com/waponix/pocket/tree/v2.1.0"
+            },
+            "time": "2023-03-26T08:18:11+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "myclabs/deep-copy",
