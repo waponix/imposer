@@ -11,12 +11,7 @@ abstract class Rule implements RuleInterface
     {
     }
 
-    public function decodePattern(string $pattern): Rule
-    {
-        return $this;
-    }
-
-    public function assert(mixed $data): ?bool
+    public function assert(mixed $data, ?array $args = null): ?bool
     {
         // override this function when extended
         return null;
