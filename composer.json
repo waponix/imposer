@@ -15,5 +15,7 @@
             "email": "eric@antlabs.com"
         }
     ],
-    "require": {}
+    "require": {
+        "waponix/pocket": "^2.1"
+    }
 }
