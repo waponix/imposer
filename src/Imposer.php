@@ -1,24 +1,20 @@
 <?php
 namespace Waponix\Imposer;
 
-use Waponix\Imposer\Rule\Common\IsString;
+use Waponix\Imposer\Rule\Common\CommonDirectives;
 use Waponix\Imposer\Rule\Rule;
-use Waponix\Pocket\Pocket;
 use Waponix\Pocket\Attribute\Service;
 
 #[Service(
     args: [
-        'commonDirectives' => [
-            IsString::class
-        ],
         'directives' => '#directive'
     ]
 )]
 class Imposer
 {
     public function __construct(
-        private readonly array $commonDirectives,
-        private ?array $directives,
+        private readonly CommonDirectives $commonDirectives,
+        private readonly ?array $directives,
     )
     {
     }
@@ -26,7 +22,8 @@ class Imposer
     private function &getDirectives()
     {
         $directives = [];
-        foreach ($this->commonDirectives as $directive) {
+
+        foreach ($this->commonDirectives->getDirectives() as $directive) {
             if (!$directive instanceof Rule) continue;
             $directives[$directive->id] = &$directive;
         }
