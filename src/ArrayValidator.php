@@ -151,8 +151,6 @@ class ArrayValidator extends Validator
             'parameters' => $parameters
         ];
 
-        var_dump($rules);
-
         return $rules;
     }
 }
