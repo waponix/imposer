@@ -67,7 +67,11 @@ class ArrayValidator extends Validator
 
             if ($tokenName === 'T_STRING' && $ruleId === null) {
                 $ruleId = $token[1];
-            } else if ($tokenName === 'T_VARIABLE') {
+            } else if ($ruleId === null) {
+                continue;
+            }
+            
+            if ($tokenName === 'T_VARIABLE') {
                 $isParameterName = true;
             } else if ($tokenName === 'T_WHITESPACE') {
                 $isParameterValue = true;
@@ -78,14 +82,15 @@ class ArrayValidator extends Validator
                 $parameterName .= $token[1];
             }
 
-            if ($tokenName !== null && $isParameterValue === true) {
+            if ($tokenName !== null && $isParameterName === false && $isParameterValue === true) {
                 $parameterValue .= $token[1];
             }
 
             if (!is_string($token)) continue;
 
             if (trim($token) === ',') {
-                if (!empty($parameterName)) {
+                $parameterValue = trim($parameterValue);
+                if ($parameterName !== '') {
                     $parameters[$parameterName] = $parameterValue;
                 } else if ($parameterValue !== '') {
                     $parameters[] = $parameterValue;
@@ -100,7 +105,9 @@ class ArrayValidator extends Validator
             }
 
             if (trim($token) === '|') {
-                if (!empty($parameterName)) {
+                $parameterValue = trim($parameterValue);
+
+                if ($parameterName !== '') {
                     $parameters[$parameterName] = $parameterValue;
                 } else if ($parameterValue !== '') {
                     $parameters[] = $parameterValue;
@@ -131,7 +138,9 @@ class ArrayValidator extends Validator
             }
         }
 
-        if (!empty($parameterName)) {
+        $parameterValue = trim($parameterValue);
+
+        if ($parameterName !== '') {
             $parameters[$parameterName] = $parameterValue;
         } else if ($parameterValue !== '') {
             $parameters[] = $parameterValue;
@@ -141,6 +150,8 @@ class ArrayValidator extends Validator
             'ruleId' => $ruleId,
             'parameters' => $parameters
         ];
+
+        var_dump($rules);
 
         return $rules;
     }
