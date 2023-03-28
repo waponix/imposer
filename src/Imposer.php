@@ -23,15 +23,13 @@ class Imposer
     {
         $directives = [];
 
-        foreach ($this->commonDirectives->getDirectives() as $directive) {
-            if (!$directive instanceof Rule) continue;
-            $directives[$directive->id] = &$directive;
+        foreach ($this->commonDirectives->getDirectives() as $commonDirective) {
+            $directives[$commonDirective->id] = $commonDirective;
         }
 
         if ($this->directives !== null) {
             foreach ($this->directives as $directive) {
-                if (!$directive instanceof Rule) continue;
-                $directives[$directive->id] = &$directive;
+                $directives[$directive->id] = $directive;
             }
         }
 

@@ -6,25 +6,17 @@ use Waponix\Pocket\Attribute\Service;
 
 class CommonDirectives
 {
-    private readonly array $directives;
+    private array $directives;
 
     public function __construct(
         NotEmpty $notEmpty,
         IsString $isString
     )
     {
-        $args = func_get_args();
-        
-        $directives = [];
-        foreach ($args as $directive) {
-            if (!$directive instanceof Rule) continue;
-            $directives[$directive->id] = $directive;
-        }
-
-        $this->directives = $directives;
+        $this->directives = func_get_args();
     }
 
-    public function getDirectives(): array
+    public function &getDirectives(): array
     {
         return $this->directives;
     }
