@@ -6,7 +6,8 @@ use Waponix\Imposer\Interface\RuleInterface;
 abstract class Rule implements RuleInterface
 {
     public function __construct(
-        public readonly string $id
+        public readonly string $id,
+        public string $message = ''
     )
     {
     }

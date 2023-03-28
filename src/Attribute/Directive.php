@@ -14,6 +14,7 @@ class Directive extends Service
 
     public function __construct(
         private readonly string $id,
+        private readonly string $message = '',
         private readonly null|string|array $tag = null,
         private readonly ?Factory $creator = null
     ) {
@@ -27,6 +28,7 @@ class Directive extends Service
         $tags = array_unique($tags);
 
         $args['id'] = $id;
+        $args['message'] = $message;
 
         parent::__construct(args:$args, tag: $tags);
     }
