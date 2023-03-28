@@ -40,76 +40,51 @@ class ArrayValidator extends Validator
 
     public function validate(): ArrayValidator
     {
+        $rules = [];
         foreach ($this->rules as $raw) {
-            $rule = $this->parseStringRule($raw);
+            $rules = array_merge($rules, $this->parseStringRule($raw));
         }
+
+        var_dump($rules); die;
 
         return $this;
     }
 
-    private function parseStringRule(string $src): array
+    private function parseStringRule(string ...$src): array
     {
         $ruleId = null;
         $parameters = [];
-        $isParameterName = false;
-        $parameterName = '';
-        $isParameterValue = false;
         $parameterValue = '';
         $rules = [];
 
-        $tokens = token_get_all('<?php ' . $src);
+        $src = implode('|', $src);
+
+        $tokens = \PhpToken::tokenize('<?php ' . $src);
 
         foreach ($tokens as $token) {
-            $tokenName = null;
-            if (is_array($token)) {
-                $tokenName = token_name($token[0]);
-            }
+            $tokenName = $token->getTokenName();
 
             if ($tokenName === 'T_STRING' && $ruleId === null) {
-                $ruleId = $token[1];
-            } else if ($ruleId === null) {
+                $ruleId = $token->text;
                 continue;
             }
-            
-            if ($tokenName === 'T_VARIABLE') {
-                $isParameterName = true;
-            } else if ($tokenName === 'T_WHITESPACE') {
-                $isParameterValue = true;
-                $isParameterName = false;
-            }
-            
-            if ($tokenName !== null && $isParameterName === true) {
-                $parameterName .= $token[1];
+
+            if ($ruleId === null) {
+                continue;
             }
 
-            if ($tokenName !== null && $isParameterName === false && $isParameterValue === true) {
-                $parameterValue .= $token[1];
+            if (in_array($tokenName, ['(', ')', 'T_WHITESPACE'])) {
+                continue;
             }
 
-            if (!is_string($token)) continue;
-
-            if (trim($token) === ',') {
-                $parameterValue = trim($parameterValue);
-                if ($parameterName !== '') {
-                    $parameters[$parameterName] = $parameterValue;
-                } else if ($parameterValue !== '') {
-                    $parameters[] = $parameterValue;
-                }
-
-                $isParameterName = false;
-                $isParameterValue = false;
-                $parameterName = '';
+            if ($tokenName === ',' && $parameterValue !== '') {
+                $parameters[] = $parameterValue;
                 $parameterValue = '';
-
                 continue;
             }
 
-            if (trim($token) === '|') {
-                $parameterValue = trim($parameterValue);
-
-                if ($parameterName !== '') {
-                    $parameters[$parameterName] = $parameterValue;
-                } else if ($parameterValue !== '') {
+            if ($tokenName === '|' && $ruleId !== null) {
+                if ($parameterValue !== '') {
                     $parameters[] = $parameterValue;
                 }
 
@@ -117,39 +92,35 @@ class ArrayValidator extends Validator
                     'ruleId' => $ruleId,
                     'parameters' => $parameters
                 ];
-
+                $parameterValue = '';
                 $ruleId = null;
                 $parameters = [];
-                $isParameterName = false;
-                $isParameterValue = false;
-                $parameterName = '';
-                $parameterValue = '';
 
                 continue;
             }
 
-            if ($isParameterName === true) {
-                $parameterName .= $token;
-                continue;
-            }
-
-            if ($isParameterValue === true) {
-                $parameterValue .= $token;
+            if ($tokenName === 'T_LNUMBER') {
+                $parameterValue = (integer) $token->text;
+            } else if ($tokenName === 'T_DNUMBER') {
+                $parameterValue = (float) $token->text;
+            } else {
+                $parameterValue .= $token->text;
             }
         }
 
         $parameterValue = trim($parameterValue);
 
-        if ($parameterName !== '') {
-            $parameters[$parameterName] = $parameterValue;
-        } else if ($parameterValue !== '') {
+        if ($parameterValue !== '') {
             $parameters[] = $parameterValue;
         }
 
-        $rules[] = [
-            'ruleId' => $ruleId,
-            'parameters' => $parameters
-        ];
+        if ($ruleId !== null) {
+            $rules[] = [
+                'ruleId' => $ruleId,
+                'parameters' => $parameters
+            ];
+            $ruleId = null;
+        }
 
         return $rules;
     }
