@@ -9,7 +9,6 @@ abstract class Validator
 
     protected array $errors = [];
     protected array $rules = [];
-    protected ?string $target = null;
 
     public function __construct(
         protected readonly array $data,
@@ -19,8 +18,7 @@ abstract class Validator
         
     }
 
-    abstract public function impose(string ...$rules): Validator;
-    abstract public function target(string $target): Validator;
+    abstract public function impose(array $rules): Validator;
 
     protected function parseStringRule(string $src): array
     {
