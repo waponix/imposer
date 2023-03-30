@@ -6,7 +6,7 @@ use Waponix\Imposer\Attribute\Directive;
 
 #[Directive(
     id: 'length', 
-    message: 'value\'s length should be exactly %d'
+    message: 'value length not correct'
 )]
 class ExactStringLength extends Rule
 {
