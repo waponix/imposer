@@ -8,7 +8,7 @@ use Waponix\Imposer\Attribute\Directive;
     id: 'length', 
     message: 'value\'s length should be exactly %d'
 )]
-class exactStringLength extends Rule
+class ExactStringLength extends Rule
 {
     public function assert(mixed $data, ?array $args = null): ?bool
     {
