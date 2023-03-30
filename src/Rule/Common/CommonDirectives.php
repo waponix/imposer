@@ -10,7 +10,8 @@ class CommonDirectives
 
     public function __construct(
         NotEmpty $notEmpty,
-        IsString $isString
+        IsString $isString,
+        ExactStringLength $exactStringLength;
     )
     {
         $this->directives = func_get_args();
