@@ -23,6 +23,7 @@ abstract class Validator
     protected function parseStringRule(string $src): array
     {
         $ruleId = null;
+        $ruleIdHolder = '';
         $parameters = [];
         $parameterValue = '';
         $rules = [];
@@ -32,9 +33,18 @@ abstract class Validator
         foreach ($tokens as $token) {
             $tokenName = $token->getTokenName();
 
-            if ($tokenName === 'T_STRING' && $ruleId === null) {
-                $ruleId = $token->text;
+            if ($tokenName === 'T_STRING' && $ruleIdHolder === '') {
+                $ruleIdHolder = $token->text;
                 continue;
+            }
+
+            if (in_array($tokenName, ['|', '(']) && $ruleId === null) {
+                $ruleId = $ruleIdHolder;
+                $ruleIdHolder = '';
+            }
+
+            if ($ruleIdHolder !== '') {
+                $ruleIdHolder .= $token->text;
             }
 
             if ($ruleId === null) {
@@ -62,6 +72,7 @@ abstract class Validator
                     'parameters' => $parameters
                 ];
                 $ruleId = null;
+                $ruleIdHolder = '';
                 $parameters = [];
 
                 continue;
