@@ -1,6 +1,8 @@
 <?php
 namespace Waponix\Imposer;
 
+use Waponix\Imposer\Exception\NoRuleDefinitionException;
+
 class ArrayValidator extends Validator
 {
     public function impose(array $rules): ArrayValidator
@@ -21,7 +23,7 @@ class ArrayValidator extends Validator
 
             foreach ($rules as $rule) {
                 if (!isset($this->directives[$rule['id']])) {
-                    throw new NoRuleDefineitionException('The rule ' . rule['id'] . ' does not exist');
+                    throw new NoRuleDefinitionException('The rule ' . $rule['id'] . ' does not exist');
                 }
 
                 $directive = $this->directives[$rule['id']];

@@ -4,6 +4,7 @@ include_once __DIR__ . '/../vendor/autoload.php';
 use PHPUnit\Framework\TestCase;
 use Waponix\Pocket\Pocket;
 use Waponix\Imposer\Imposer;
+use Waponix\Imposer\Exception\NoRuleDefinitionException;
 
 class ImposerTest extends TestCase
 {
@@ -44,5 +45,19 @@ class ImposerTest extends TestCase
 
         $this->assertIsArray($error);
         $this->assertSame($error['user']['name'][0], 'value should not be longer than 2');
+    }
+
+    public function testShouldThrowNoRuleDefinitionException()
+    {
+        $this->expectException(NoRuleDefinitionException::class);
+
+        $imposer = $this->loadImposer();
+
+        $validator = $imposer->createFromArray($this->data);
+        $validator
+            ->impose([
+                'user.name' => 'strings.string|notEmpty|length(2)'
+            ])
+            ->validate();
     }
 }
