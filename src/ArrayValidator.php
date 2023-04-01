@@ -27,8 +27,9 @@ class ArrayValidator extends Validator
                 }
 
                 $directive = $this->directives[$rule['id']];
+                $assert = $directive->assert;
 
-                if ($directive->assert($this->getTargetData($target), $rule['parameters']) === false) {
+                if ($assert($this->getTargetData($target), $rule['parameters']) === false) {
                     $this->addError($target, $this->translateById($directive->message, $rule['parameters']));
                 }
             }

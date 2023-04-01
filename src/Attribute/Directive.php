@@ -2,21 +2,20 @@
 namespace Waponix\Imposer\Attribute;
 
 use Waponix\Pocket\Attribute\Service;
-use Waponix\Pocket\Attribute\Factory;
 
 /**
  * RuleMeta extends the service attribute class and exposes a different set of option
  */
-#[\Attribute]
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
 class Directive extends Service
 {
     const ID = 'directive';
 
     public function __construct(
-        private readonly string $id,
-        private readonly string $message = '',
+        public readonly string $message = '',
         private readonly null|string|array $tag = null,
-        private readonly ?Factory $creator = null
+        public readonly ?string $id = null,
+        public readonly ?string $group = null
     ) {
         $tags = [self::ID];
         if (is_string($tag)) {
@@ -25,11 +24,6 @@ class Directive extends Service
             $tags = array_merge($tags, $tag);
         }
 
-        $tags = array_unique($tags);
-
-        $args['id'] = $id;
-        $args['message'] = $message;
-
-        parent::__construct(args:$args, tag: $tags);
+        parent::__construct(tag: $tags);
     }
 }

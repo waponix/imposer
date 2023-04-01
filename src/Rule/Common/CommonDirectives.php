@@ -6,12 +6,10 @@ use Waponix\Pocket\Attribute\Service;
 
 class CommonDirectives
 {
-    private array $directives;
+    private array $directives = [];
 
     public function __construct(
-        NotEmpty $notEmpty,
-        TypeString $typeString,
-        MaxStringLength $exactStringLength,
+        StringRules $stringRules,
     )
     {
         $this->directives = func_get_args();
