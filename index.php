@@ -1,0 +1,29 @@
+<?php
+include_once __DIR__ . '/vendor/autoload.php';
+
+use PHPUnit\Framework\TestCase;
+use Waponix\Pocket\Pocket;
+use Waponix\Imposer\Imposer;
+
+$pocket = new Pocket(root: __DIR__ . '/src');
+$imposer = $pocket->get(Imposer::class);
+
+$data = [
+    'user' => [
+        'name' => 'Bob',
+        'email' => 'bob@email.com',
+        'age' => 20
+    ]
+];
+
+$validator = $imposer->createFromArray($data);
+
+$validator
+    ->impose([
+        'user.name' => 'string|notEmpty|length(10, abc, 2.5, happy)'
+    ])
+    ->validate();
+
+$errors = $validator->getErrors();
+
+var_dump($errors); die;

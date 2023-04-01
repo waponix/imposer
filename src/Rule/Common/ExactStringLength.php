@@ -6,12 +6,12 @@ use Waponix\Imposer\Attribute\Directive;
 
 #[Directive(
     id: 'length', 
-    message: 'value length not correct'
+    message: 'value should not be longer than $1'
 )]
 class ExactStringLength extends Rule
 {
     public function assert(mixed $data, ?array $args = null): ?bool
     {
-        return is_string($data) && strlen($data) === $args[0];
+        return is_string($data) && strlen($data) === $args['$1'];
     }
 }

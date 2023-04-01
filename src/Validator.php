@@ -46,21 +46,21 @@ abstract class Validator
             }
 
             if ($tokenName === ',' && $parameterValue !== '') {
-                $parameters[] = $parameterValue;
+                $this->pushParameter($parameters, $this->translateValue($parameterValue));
                 $parameterValue = '';
                 continue;
             }
 
             if ($tokenName === '|' && $ruleId !== null) {
                 if ($parameterValue !== '') {
-                    $parameters[] = $this->translateValue($parameterValue);
+                    $this->pushParameter($parameters, $this->translateValue($parameterValue));
+                    $parameterValue = '';
                 }
 
                 $rules[] = [
                     'id' => $ruleId,
                     'parameters' => $parameters
                 ];
-                $parameterValue = '';
                 $ruleId = null;
                 $parameters = [];
 
@@ -77,7 +77,7 @@ abstract class Validator
         }
 
         if ($parameterValue !== '') {
-            $parameters[] = $this->translateValue($parameterValue);
+            $this->pushParameter($parameters, $this->translateValue($parameterValue));
         }
 
         if ($ruleId !== null) {
@@ -91,7 +91,13 @@ abstract class Validator
         return $rules;
     }
 
-    protected function translateValue(mixed $value): mixed
+    private function pushParameter(array &$array, mixed $value): void
+    {
+        $id = count($array) + 1;
+        $array['$' . $id] = $value;
+    }
+
+    private function translateValue(mixed $value): mixed
     {
         if (!is_string($value)) return $value;
         if (substr($value, 0, 1) !== '[' || substr($value, -1) !== ']') return $value;
@@ -134,6 +140,15 @@ abstract class Validator
         $errors[] = $message;
 
         return $this;
+    }
+
+    protected function translateById(string $subject, array $translations): string
+    {
+        foreach ($translations as $id => $value) {
+            $subject = str_replace($id, $value, $subject);
+        }
+
+        return $subject;
     }
 
     public function isValid(): bool

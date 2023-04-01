@@ -6,12 +6,7 @@ class ArrayValidator extends Validator
     public function impose(array $rules): ArrayValidator
     {
         foreach ($rules as $target => $rule) {
-            if (isset($this->rules[$target])) {
-                $this->rules[$target] = array_unique([...explode(self::D_SEPARATOR, $this->rules[$target]), ...explode(self::D_SEPARATOR, $rule)]);
-            }
-
-            $this->rules[$target] = implode(self::D_SEPARATOR, $rules);
-
+            $this->rules[$target] = $rule;
         }
 
         return $this;
@@ -30,7 +25,7 @@ class ArrayValidator extends Validator
                 $directive = $this->directives[$rule['id']];
 
                 if ($directive->assert($this->getTargetData($target), $rule['parameters']) === false) {
-                    $this->addError($target, $directive->message);
+                    $this->addError($target, $this->translateById($directive->message, $rule['parameters']));
                 }
             }
         }
