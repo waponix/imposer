@@ -7,7 +7,7 @@ use Waponix\Pocket\Attribute\Factory;
 /**
  * RuleMeta extends the service attribute class and exposes a different set of option
  */
-#[\Attribute(\Attribute::TARGET_CLASS)]
+#[\Attribute]
 class Directive extends Service
 {
     const ID = 'directive';

@@ -5,13 +5,13 @@ use Waponix\Imposer\Rule\Rule;
 use Waponix\Imposer\Attribute\Directive;
 
 #[Directive(
-    id: 'string', 
-    message: 'value is not a string'
+    id: 'length', 
+    message: 'value should not be longer than $1'
 )]
-class IsString extends Rule
+class MaxStringLength extends Rule
 {
     public function assert(mixed $data, ?array $args = null): ?bool
     {
-        return is_string($data);
+        return is_string($data) && strlen($data) === $args['$1'];
     }
 }
