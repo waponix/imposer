@@ -9,6 +9,7 @@ class CommonDirectives
     private array $directives = [];
 
     public function __construct(
+        RequireRules $requireRules,
         StringRules $stringRules,
     )
     {
