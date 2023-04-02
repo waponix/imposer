@@ -95,6 +95,7 @@ abstract class Validator
         }
 
         // process the last value that were parsed
+        $ruleId = $ruleIdHolder;
         if ($parameterValue !== '') {
             $this->pushParameter($parameters, $this->translateValue($parameterValue));
         }
