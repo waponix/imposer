@@ -50,6 +50,7 @@ class Imposer
                 };
 
                 $directives[$id] = (object) [
+                    'group' => $directive,
                     'assert' => function (mixed $data, $args) use ($directive, $method) {
                         return $method->invokeArgs($directive, [$data, $args]);
                     },
