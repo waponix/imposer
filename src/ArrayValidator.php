@@ -2,6 +2,7 @@
 namespace Waponix\Imposer;
 
 use Waponix\Imposer\Exception\NoRuleDefinitionException;
+use Waponix\Imposer\Rule\AbstractRequire;
 
 class ArrayValidator extends Validator
 {
@@ -26,15 +27,11 @@ class ArrayValidator extends Validator
                     throw new NoRuleDefinitionException('The rule ' . $rule['id'] . ' does not exist');
                 }
 
-                if ($rule['id'] !== self::REQUIRED && $data instanceof _ValueNotFound) {
-                    continue; // ignore this, since it is not required
-                }
-
                 $directive = $this->directives[$rule['id']];
                 $assert = $directive->assert;
 
-                if ($rule['id'] === self::REQUIRED && $data instanceof _ValueNotFound) {
-                    $this->addError($target, $this->translateById($directive->message, $rule['parameters']));
+                if ($data instanceof _ValueNotFound && !$directive->group instanceof AbstractRequire) {
+                    // skip this validation since it is not a qualified rule for validating the value _ValueNotFound
                     continue;
                 }
 
