@@ -51,8 +51,9 @@ class Imposer
 
                 $directives[$id] = (object) [
                     'group' => $directive,
-                    'assert' => function (mixed $data, $args) use ($directive, $method) {
-                        return $method->invokeArgs($directive, [$data, $args]);
+                    'assert' => function (mixed $data, &$args) use ($directive, $method) {
+                        $methodArgs = [$data, &$args]; // ensures that the args are passed by reference
+                        return $method->invokeArgs($directive, $methodArgs);
                     },
                     'message' => $methodDirective->message,
                 ];

@@ -1,7 +1,6 @@
 <?php
 namespace Waponix\Imposer\Rule\Common;
 
-use Waponix\Imposer\Rule\Rule;
 use Waponix\Pocket\Attribute\Service;
 
 class CommonDirectives
@@ -13,6 +12,7 @@ class CommonDirectives
         StringRule $stringRule,
         NumberRule $numberRule,
         EmailRule $emailRule,
+        EvalRule $evalRule,
     )
     {
         $this->directives = func_get_args();

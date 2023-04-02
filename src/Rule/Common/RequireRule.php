@@ -4,10 +4,10 @@ namespace Waponix\Imposer\Rule\Common;
 
 use Waponix\Imposer\Attribute\Directive;
 use Waponix\Imposer\_ValueNotFound;
-use Waponix\Imposer\Rule\AbstractRequire;
+use Waponix\Imposer\Rule\RequireValidator;
 
 #[Directive]
-class RequireRule extends AbstractRequire
+class RequireRule extends RequireValidator
 {
     #[Directive(
         id: 'require',
