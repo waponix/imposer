@@ -11,6 +11,8 @@ class CommonDirectives
     public function __construct(
         RequireRule $requireRule,
         StringRule $stringRule,
+        NumberRule $numberRule,
+        EmailRule $emailRule,
     )
     {
         $this->directives = func_get_args();
