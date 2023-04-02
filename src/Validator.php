@@ -7,6 +7,8 @@ abstract class Validator
     const T_SEPARATOR = '.';
     const ID_ARRAY = '[]';
 
+    const REQUIRED = 'require';
+
     protected array $errors = [];
     protected array $rules = [];
 
@@ -33,20 +35,23 @@ abstract class Validator
         foreach ($tokens as $token) {
             $tokenName = $token->getTokenName();
 
-            if ($tokenName === 'T_STRING' && $ruleIdHolder === '') {
+            // get the first potential value of rule id
+            if (!in_array($tokenName, ['T_OPEN_TAG', 'T_WHITESPACE']) && $ruleIdHolder === '') {
                 $ruleIdHolder = $token->text;
                 continue;
             }
 
+            // rule id reached its last value, can now pass it to $ruleId and reset $ruleIdHolder
             if (in_array($tokenName, ['|', '(']) && $ruleId === null) {
                 $ruleId = $ruleIdHolder;
-                $ruleIdHolder = '';
             }
 
-            if ($ruleIdHolder !== '') {
+            // keep concatinating the value to rule id (ignore white spaces)
+            if ($tokenName !== 'T_WHITESPACE' && $ruleIdHolder !== '' && $ruleId === null) {
                 $ruleIdHolder .= $token->text;
             }
 
+            // rule id is not identified yet so don't proceed with parsing other parts
             if ($ruleId === null) {
                 continue;
             }
@@ -55,12 +60,14 @@ abstract class Validator
                 continue;
             }
 
+            // push parameter value to the parameters stack
             if ($tokenName === ',' && $parameterValue !== '') {
                 $this->pushParameter($parameters, $this->translateValue($parameterValue));
                 $parameterValue = '';
                 continue;
             }
 
+            // push the rule to the stack
             if ($tokenName === '|' && $ruleId !== null) {
                 if ($parameterValue !== '') {
                     $this->pushParameter($parameters, $this->translateValue($parameterValue));
@@ -87,6 +94,7 @@ abstract class Validator
             }
         }
 
+        // process the last value that were parsed
         if ($parameterValue !== '') {
             $this->pushParameter($parameters, $this->translateValue($parameterValue));
         }
@@ -118,14 +126,14 @@ abstract class Validator
         return $this->getTargetData($value);
     }
 
-    protected function getTargetData(string $target)
+    protected function getTargetData(string $target): mixed
     {
         $keys = explode('.', $target);
         $targetData = $this->data;
 
         foreach ($keys as $key) {
             if (!isset($targetData[$key])) {
-                return null;
+                return new _ValueNotFound;
             }
 
             if ($targetData === null) {

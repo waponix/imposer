@@ -9,8 +9,8 @@ class CommonDirectives
     private array $directives = [];
 
     public function __construct(
-        RequireRules $requireRules,
-        StringRules $stringRules,
+        RequireRule $requireRule,
+        StringRule $stringRule,
     )
     {
         $this->directives = func_get_args();

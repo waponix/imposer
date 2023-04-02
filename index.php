@@ -10,7 +10,7 @@ $imposer = $pocket->get(Imposer::class);
 
 $data = [
     'user' => [
-        'name' => 'Bob',
+        'name' => 0,
         'email' => 'bob@email.com',
         'age' => 20
     ]
@@ -20,10 +20,11 @@ $validator = $imposer->createFromArray($data);
 
 $validator
     ->impose([
-        'user.name' => 'string|notEmpty|length(10, abc, 2.5, happy)'
+        'user.name' => 'string|notEmpty|length(1)',
+        'user.address' => 'require|string',
     ])
     ->validate();
 
 $errors = $validator->getErrors();
 
-var_dump($errors); die;
+var_dump(json_encode($errors, JSON_PRETTY_PRINT)); die;

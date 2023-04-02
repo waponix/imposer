@@ -5,7 +5,7 @@ namespace Waponix\Imposer\Rule\Common;
 use Waponix\Imposer\Attribute\Directive;
 
 #[Directive]
-class StringRules
+class StringRule
 {
     #[Directive(
         id: 'string',
