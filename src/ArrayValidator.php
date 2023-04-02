@@ -17,12 +17,10 @@ class ArrayValidator extends Validator
 
     public function validate(): ArrayValidator
     {
-        $rules = [];
         foreach ($this->rules as $target => $raw) {
-            $rules = [...$rules, ...$this->parseStringRule($raw)];
             $data = $this->getTargetData($target);
 
-            foreach ($rules as $rule) {
+            foreach ($this->parseStringRule($raw) as $rule) {
                 if (!isset($this->directives[$rule['id']])) {
                     throw new NoRuleDefinitionException('The rule ' . $rule['id'] . ' does not exist');
                 }
