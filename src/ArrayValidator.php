@@ -19,8 +19,9 @@ class ArrayValidator extends Validator
     {
         foreach ($this->rules as $target => $raw) {
             $data = $this->getTargetData($target);
+            $rules = $this->parseStringRule($raw);
 
-            foreach ($this->parseStringRule($raw) as $rule) {
+            foreach ($rules as $rule) {
                 if (!isset($this->directives[$rule['id']])) {
                     throw new NoRuleDefinitionException('The rule ' . $rule['id'] . ' does not exist');
                 }
