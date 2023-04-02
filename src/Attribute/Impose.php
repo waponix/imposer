@@ -1,7 +1,7 @@
 <?php
 namespace Waponix\Imposer\Attribute;
 
-#[\Attribuate(\Attribuate::TARGET_METHOD | \Attribute::TARGET_METHOD)]
+#[\Attribuate(\Attribuate::TARGET_METHOD | \Attribute::TARGET_PROPERTY)]
 class Impose
 {
     public function __construct(
