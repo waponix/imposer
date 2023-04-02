@@ -12,7 +12,6 @@ class EmailRule
     )]
     public static function email(mixed $data, array $args): bool
     {
-        var_dump(filter_val($data, FILTER_VALIDATE_EMAIL)); die;
-        return filter_val($data, FILTER_VALIDATE_EMAIL) !== false;
+        return filter_var($data, FILTER_VALIDATE_EMAIL) !== false;
     }
 }
