@@ -77,4 +77,9 @@ class Imposer
     {
         return new ArrayValidator(data: $data, directives: $this->getDirectives());
     }
+
+    public function createFromObject(object $data): ObjectValidator
+    {
+        return new ObjectValidator($data);
+    }
 }
