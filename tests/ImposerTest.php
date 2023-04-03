@@ -44,7 +44,7 @@ class ImposerTest extends TestCase
         $error = $validator->getErrors();
 
         $this->assertIsArray($error);
-        $this->assertSame($error['user']['name'][0], 'value should not be longer than 2');
+        $this->assertSame($error['user']['name'][0], 'value is longer than 2');
     }
 
     public function testShouldThrowNoRuleDefinitionException()
