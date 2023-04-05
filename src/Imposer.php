@@ -15,7 +15,7 @@ class Imposer
 {
     public function __construct(
         private readonly CommonDirectives $commonDirectives,
-        private readonly ?array $directives,
+        private readonly array $directives,
     )
     {
     }
@@ -73,13 +73,13 @@ class Imposer
         return $attribute->newInstance();
     }
 
-    public function createFromArray(array $data): ArrayValidator
+    public function createFromArray(array $rules): ArrayValidator
     {
-        return new ArrayValidator(data: $data, directives: $this->getDirectives());
+        return new ArrayValidator(rules: $rules, directives: $this->getDirectives());
     }
 
     public function createFromObject(object $data): ObjectValidator
     {
-        return new ObjectValidator($data);
+        return new ObjectValidator($data, directives: $this->getDirectives());
     }
 }

@@ -6,6 +6,8 @@ use Waponix\Pocket\Pocket;
 use Waponix\Imposer\Imposer;
 use Waponix\Imposer\Exception\NoRuleDefinitionException;
 
+Pocket::setRoot(root: __DIR__ . '/../src');
+
 class ImposerTest extends TestCase
 {
     private array $data = [
@@ -15,9 +17,10 @@ class ImposerTest extends TestCase
             'age' => 20
         ]
     ];
+
     private function loadImposer(): Imposer
     {
-        $pocket = new Pocket(root: __DIR__ . '/../src');
+        $pocket = Pocket::getInstance();
         $imposer = $pocket->get(Imposer::class);
 
         return $imposer;
@@ -34,12 +37,10 @@ class ImposerTest extends TestCase
     {
         $imposer = $this->loadImposer();
 
-        $validator = $imposer->createFromArray($this->data);
-        $validator
-            ->impose([
-                'user.name' => 'string|notEmpty|length(2)'
-            ])
-            ->validate();
+        $validator = $imposer->createFromArray([
+            'user.name' => 'string|notEmpty|length(2)'
+        ]);
+        $validator->validate($this->data);
 
         $error = $validator->getErrors();
 
@@ -53,11 +54,9 @@ class ImposerTest extends TestCase
 
         $imposer = $this->loadImposer();
 
-        $validator = $imposer->createFromArray($this->data);
-        $validator
-            ->impose([
-                'user.name' => 'strings.string|notEmpty|length(2)'
-            ])
-            ->validate();
+        $validator = $imposer->createFromArray([
+            'user.name' => 'strings.string|notEmpty|length(2)'
+        ]);
+        $validator->validate($this->data);
     }
 }

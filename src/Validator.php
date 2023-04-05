@@ -2,6 +2,7 @@
 namespace Waponix\Imposer;
 
 use Waponix\Imposer\Exception\NoRuleDefinitionException;
+use Waponix\Imposer\Rule\RequireValidator;
 
 abstract class Validator
 {
@@ -12,20 +13,19 @@ abstract class Validator
     const REQUIRED = 'require';
 
     protected array $errors = [];
-    protected array $rules = [];
+    protected array $data = [];
 
     public function __construct(
-        protected readonly array $data,
+        protected array $rules,
         protected readonly array $directives
     )
     {
         
     }
 
-    abstract public function impose(array $rules): Validator;
-
-    public function validate(): ArrayValidator
+    public function validate(array $data): Validator
     {
+        $this->data = $data;
         foreach ($this->rules as $target => $raw) {
             $data = $this->getTargetData($target);
             $rules = $this->parseStringRule($raw);
