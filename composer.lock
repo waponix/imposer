@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "waponix/pocket",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/waponix/pocket.git",
-                "reference": "ceddec0437d955d72eff1251ea9efb0ff71b73a3"
+                "reference": "ad00b427f27744c03cb3a11a4dafaaa68bad9e01"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/waponix/pocket/zipball/ceddec0437d955d72eff1251ea9efb0ff71b73a3",
-                "reference": "ceddec0437d955d72eff1251ea9efb0ff71b73a3",
+                "url": "https://api.github.com/repos/waponix/pocket/zipball/ad00b427f27744c03cb3a11a4dafaaa68bad9e01",
+                "reference": "ad00b427f27744c03cb3a11a4dafaaa68bad9e01",
                 "shasum": ""
             },
             "require": {
@@ -45,9 +45,9 @@
             "description": "Is a service container that considers all loadable classes inside a project as a service.",
             "support": {
                 "issues": "https://github.com/waponix/pocket/issues",
-                "source": "https://github.com/waponix/pocket/tree/v2.1.0"
+                "source": "https://github.com/waponix/pocket/tree/v2.2.0"
             },
-            "time": "2023-03-26T08:18:11+00:00"
+            "time": "2023-04-04T15:29:29+00:00"
         }
     ],
     "packages-dev": [
