@@ -1,8 +1,6 @@
 <?php
 namespace Waponix\Imposer;
 
-use Waponix\Imposer\Rule\RequireValidator;
-
 class ArrayValidator extends Validator
 {
     public function impose(array $rules): ArrayValidator
