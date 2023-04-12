@@ -22,11 +22,27 @@ class ObjectValidator extends Validator
 
         $this->root = lcfirst($reflectionClass->getName());
 
-        $properties = $reflectionClass->getProperties();
+        $properties = $this->loadProperties($reflectionClass);
 
         foreach ($properties as $property) {
             $this->getImposedRules($property);
         }
+    }
+
+    private function loadProperties(\ReflectionClass $reflectionClass): array
+    {
+        $properties = [];
+
+        do {
+            $reflectionProperties = $reflectionClass->getProperties();
+
+            foreach ($reflectionProperties as $property) {
+                if (isset($properties[$property->getName()])) continue; //prioritize child property definition
+                $properties[$property->getName()] = $property;
+            }
+        } while ($reflectionClass = $reflectionClass->getParentClass());
+
+        return $properties;
     }
 
     private function getImposedRules(\Reflector $reflection): void
@@ -70,7 +86,6 @@ class ObjectValidator extends Validator
         return $imposed;
     }
 
-    // apply
     public function apply(array $data): void
     {
         

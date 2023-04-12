@@ -14,13 +14,14 @@ abstract class Validator
 
     protected array $errors = [];
     protected array $data = [];
+    protected array $rules = [];
 
     public function __construct(
-        protected array $rules,
+        array $rules,
         protected readonly array $directives
     )
     {
-        
+        $this->rules = $rules;
     }
 
     public function validate(array $data): Validator
