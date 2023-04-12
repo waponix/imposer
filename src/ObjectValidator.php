@@ -7,22 +7,22 @@ class ObjectValidator extends Validator
 {
     private array $imposed = [];
     private readonly string $root;
+    private \ReflectionClass $objectReflection;
 
     public function __construct(
         private readonly object $object,
         protected readonly array $directives
     )
     {
+        $this->objectReflection = new \ReflectionClass($object);
         $this->mapObjectRules();
     }
 
     private function mapObjectRules(): void
     {
-        $reflectionClass = new \ReflectionClass($this->object);
+        $this->root = lcfirst($this->objectReflection->getName());
 
-        $this->root = lcfirst($reflectionClass->getName());
-
-        $properties = $this->loadProperties($reflectionClass);
+        $properties = $this->loadProperties($this->objectReflection);
 
         foreach ($properties as $property) {
             $this->getImposedRules($property);
@@ -45,6 +45,17 @@ class ObjectValidator extends Validator
         return $properties;
     }
 
+    private function getReflectionProperty(\ReflectionClass $reflectionClass, string $property): ?\ReflectionProperty
+    {
+        do {
+            if ($reflectionClass->hasProperty($property) === false) continue;
+
+            return $reflectionClass->getProperty($property);
+        } while ($reflectionClass = $reflectionClass->getParentClass());
+
+        return null;
+    }
+
     private function getImposedRules(\Reflector $reflection): void
     {
         $imposed = $this->getImposed($reflection);
@@ -52,6 +63,7 @@ class ObjectValidator extends Validator
         if ($imposed === null) return;
 
         $target = $reflection->getName();
+        $imposed->target = $target;
 
         $this->rules[implode('.', [$this->root, $target])] = $imposed->rules;
     }
@@ -86,8 +98,28 @@ class ObjectValidator extends Validator
         return $imposed;
     }
 
-    public function apply(array $data): void
+    public function apply(): void
     {
-        
+        if ($this->isValid() === false) return; // only apply values if there are no errors
+
+        foreach ($this->imposed as $target => $impose) {
+            if (!$impose instanceof Impose) continue;
+
+            $getter = $impose->getter;
+            
+            if ($getter === null) {
+                // try assigning the value to the property directly
+                $property = $this->getReflectionProperty($this->objectReflection, $impose->target);
+
+                if ($property === null) continue; // property not found, skip it
+                if ($property->isPublic() === false) continue; // property is not accessible, skip it
+
+                $data = $this->getTargetData($target);
+
+                if ($data instanceof _ValueNotFound) continue; // data to assign is not defined, skip it
+
+                $this->object->{$property->getName()} = $data;
+            }
+        }
     }
 }
