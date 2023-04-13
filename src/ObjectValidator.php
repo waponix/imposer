@@ -116,11 +116,15 @@ class ObjectValidator extends Validator
                 $property = $this->getReflectionProperty($this->objectReflection, $impose->target);
 
                 if ($property === null) continue; // property not found, skip it
-                if ($property->isPublic() === false) continue; // property is not accessible, skip it
+                if ($property->isPublic() === false) continue; // property is not accessible, skip it (TODO: this should throw exception)
 
                 $this->object->{$property->getName()} = $data;
             } else {
                 if ($this->objectReflection->hasMethod($setter) === false) // no method found, skip it (TODO: this should throw exception)
+
+                $method = $this->objectReflection->getMethod($setter);
+
+                if ($method->isPublic() === false) // method is not accessible, skip it (TODO: this should throw exception)
                 
                 $this->object->{$setter}($data);
             }
