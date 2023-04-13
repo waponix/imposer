@@ -105,20 +105,24 @@ class ObjectValidator extends Validator
         foreach ($this->imposed as $target => $impose) {
             if (!$impose instanceof Impose) continue;
 
-            $getter = $impose->getter;
+            $data = $this->getTargetData($target);
+
+            if ($data instanceof _ValueNotFound) continue; // data to assign is not defined, skip it
+
+            $setter = $impose->setter;
             
-            if ($getter === null) {
+            if ($setter === null) {
                 // try assigning the value to the property directly
                 $property = $this->getReflectionProperty($this->objectReflection, $impose->target);
 
                 if ($property === null) continue; // property not found, skip it
                 if ($property->isPublic() === false) continue; // property is not accessible, skip it
 
-                $data = $this->getTargetData($target);
-
-                if ($data instanceof _ValueNotFound) continue; // data to assign is not defined, skip it
-
                 $this->object->{$property->getName()} = $data;
+            } else {
+                if ($this->objectReflection->hasMethod($setter) === false) // no method found, skip it (TODO: this should throw exception)
+                
+                $this->object->{$setter}($data);
             }
         }
     }
