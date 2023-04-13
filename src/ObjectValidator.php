@@ -56,6 +56,17 @@ class ObjectValidator extends Validator
         return null;
     }
 
+    private function getReflectionMethod(\ReflectionClass $reflectionClass, string $method): ?\ReflectionMethod
+    {
+        do {
+            if ($reflectionClass->hasMethod($method) === false) continue;
+
+            return $reflectionClass->getMethod($method);
+        } while ($reflectionClass = $reflectionClass->getParentClass());
+
+        return null;
+    }
+
     private function getImposedRules(\Reflector $reflection): void
     {
         $imposed = $this->getImposed($reflection);
@@ -120,11 +131,10 @@ class ObjectValidator extends Validator
 
                 $this->object->{$property->getName()} = $data;
             } else {
-                if ($this->objectReflection->hasMethod($setter) === false) // no method found, skip it (TODO: this should throw exception)
+                $method = $this->getReflectionMethod($this->objectReflection, $setter);
 
-                $method = $this->objectReflection->getMethod($setter);
-
-                if ($method->isPublic() === false) // method is not accessible, skip it (TODO: this should throw exception)
+                if ($method === null) continue; // no method found, skip it (TODO: this should throw exception)
+                if ($method->isPublic() === false) continue; // method is not accessible, skip it (TODO: this should throw exception)
                 
                 $this->object->{$setter}($data);
             }
