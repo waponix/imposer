@@ -4,9 +4,9 @@ namespace Waponix\Imposer;
 use Waponix\Imposer\Rule\Common\CommonDirectives;
 use Waponix\Imposer\Rule\Rules;
 use Waponix\Imposer\Attribute\Directive;
-use Waponix\Pocket\Attribute\Service;
+use Waponix\Pocket\Attribute\ServiceAttribute;
 
-#[Service(
+#[ServiceAttribute(
     args: [
         'directives' => '#directive'
     ]

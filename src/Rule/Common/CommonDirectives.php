@@ -1,8 +1,6 @@
 <?php
 namespace Waponix\Imposer\Rule\Common;
 
-use Waponix\Pocket\Attribute\Service;
-
 class CommonDirectives
 {
     private array $directives = [];

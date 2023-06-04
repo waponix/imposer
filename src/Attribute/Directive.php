@@ -1,13 +1,13 @@
 <?php
 namespace Waponix\Imposer\Attribute;
 
-use Waponix\Pocket\Attribute\Service;
+use Waponix\Pocket\Attribute\ServiceAttribute;
 
 /**
  * RuleMeta extends the service attribute class and exposes a different set of option
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD)]
-class Directive extends Service
+class Directive extends ServiceAttribute
 {
     const ID = 'directive';
 
